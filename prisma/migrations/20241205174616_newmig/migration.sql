@@ -1,12 +1,3 @@
--- CreateExtension
-CREATE EXTENSION IF NOT EXISTS "hstore" WITH SCHEMA "myHstoreSchema";
-
--- CreateExtension
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
-
--- CreateExtension
-CREATE EXTENSION IF NOT EXISTS "postgis" WITH VERSION "2.1";
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
