@@ -6,7 +6,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email, name, password } = body;
-    console.log(body);
 
     const existingUserByEmail = await db.user.findUnique({
       where: { email: email },
@@ -36,7 +35,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
-        user: rest,
+        user: newUser,
         message: 'User created successfully',
       },
       { status: 201 }
