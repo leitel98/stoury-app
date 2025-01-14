@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <section className='flex items-center justify-between w-full h-14 px-12 bg-zinc-900'>
       <Button variant='secondary'>
-        <Link href={window.location.origin}>Logo</Link>
+        <Link href='/'>Logo</Link>
       </Button>
       <NavigationMenu>
         <NavigationMenuList>
@@ -53,7 +53,7 @@ const Navbar = () => {
                       onClick={() =>
                         signOut({
                           redirect: true,
-                          callbackUrl: `${window.location.origin}`,
+                          callbackUrl: '/',
                         })
                       }>
                       Sign Out

@@ -49,7 +49,7 @@ const LoginForm = () => {
       });
 
       if (result?.ok) {
-        router.push(window.location.origin);
+        router.push('/');
       } else {
         console.error('Error logging in', result?.error);
       }
