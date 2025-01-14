@@ -11,7 +11,7 @@ const authOptions: NextAuthConfig = {
     strategy: 'jwt',
   },
   pages: {
-    signIn: '/?type=login',
+    signIn: '/login',
   },
   providers: [
     CredentialsProvider({
