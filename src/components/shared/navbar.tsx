@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   NavigationMenu,
@@ -8,31 +8,39 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { Button } from '../ui/button';
+} from "@/components/ui/navigation-menu";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { User } from "next-auth";
 
-const Navbar = () => {
-  const session = useSession();
+type NavBarProps = {
+  user: User | null;
+};
+
+const Navbar = ({ user }: NavBarProps) => {
+  const { data: session } = useSession();
+
+  const userData = user ?? session?.user ?? null;
+
   return (
-    <section className='flex items-center justify-between w-full h-14 px-12 bg-zinc-900'>
-      <Button variant='secondary'>
-        <Link href='/'>Logo</Link>
+    <section className="flex items-center justify-between w-full h-14 px-12 bg-zinc-900">
+      <Button variant="secondary">
+        <Link href="/">Logo</Link>
       </Button>
       <NavigationMenu>
         <NavigationMenuList>
-          {!session.data?.user && (
+          {!userData && (
             <>
               <NavigationMenuItem>
-                <Link href='/register' legacyBehavior passHref>
+                <Link href="/register" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Register
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href='/login' legacyBehavior passHref>
+                <Link href="/login" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Log In
                   </NavigationMenuLink>
@@ -40,22 +48,23 @@ const Navbar = () => {
               </NavigationMenuItem>
             </>
           )}
-          {session.data?.user && (
+          {userData && (
             <>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className='w-48'>
-                  {session.data.user.name}
+                <NavigationMenuTrigger className="w-48">
+                  {userData.name}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <NavigationMenuLink className='w-48' asChild>
+                  <NavigationMenuLink className="w-48" asChild>
                     <Button
-                      variant='secondary'
+                      variant="secondary"
                       onClick={() =>
                         signOut({
                           redirect: true,
-                          callbackUrl: '/',
+                          callbackUrl: "/",
                         })
-                      }>
+                      }
+                    >
                       Sign Out
                     </Button>
                   </NavigationMenuLink>
