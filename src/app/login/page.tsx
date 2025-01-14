@@ -12,19 +12,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const userSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: 'Name must be at least 3 characters long.' })
-    .max(20, { message: 'Name must be at most 20 characters long.' })
-    .regex(/^[a-zA-Z0-9_\s]+$/, {
-      message:
-        'Name can only contain letters, numbers, underscores, and spaces.',
-    }),
   email: z.string().email({ message: 'Invalid email address.' }),
   password: z
     .string()
@@ -38,30 +31,30 @@ const userSchema = z.object({
     .regex(/[0-9]/, { message: 'Password must contain at least one number.' }),
 });
 
-export default function Register() {
+export default function Login() {
   const router = useRouter();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      name: '',
       email: '',
       password: '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof userSchema>) => {
-    const response = await fetch('/api/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const result = await signIn('credentials', {
+        ...data,
+        redirect: false,
+      });
 
-    if (response.ok) {
-      router.push('/login');
-    } else {
-      console.error('Error creating user');
+      if (result?.ok) {
+        router.push(window.location.origin);
+      } else {
+        console.error('Error logging in', result?.error);
+      }
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
     }
   };
 
@@ -70,22 +63,6 @@ export default function Register() {
       <div className='w-80'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder='name' {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name='email'
