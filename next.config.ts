@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
     config.devtool = dev ? 'eval-source-map' : 'source-map';
     return config;
   },
+  experimental: {
+    turbo: {
+      // ...
+    },
+  },
 };
 
 export default nextConfig;
